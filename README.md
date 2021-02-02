@@ -101,3 +101,52 @@ void main() {
 state changed: 1
 state changed: 2
 ```
+
+### onChange
+また、Cubitと同様、Blocのなかで`onChange()`をオーバーライドすることで、状態の変更を受け取り、必要な処理を行う事ができる。  
+
+```dart
+import 'package:bloc/bloc.dart';
+
+enum CounterEvent { increment, decrement }
+
+class CounterBloc extends Bloc<CounterEvent, int> {
+  CounterBloc() : super(0);
+
+  @override
+  Stream<int> mapEventToState(CounterEvent event) async* {
+    switch (event) {
+      case CounterEvent.increment:
+        yield state + 1;
+        break;
+      case CounterEvent.decrement:
+        yield state - 1;
+        break;
+    }
+  }
+
+  @override
+  void onChange(Change<int> change) {
+    print('CouterBloc.onChange(): $change');
+    super.onChange(change);
+  }
+}
+```
+
+以下のように`main()`を変更します。  
+
+```dart
+void main() {
+  CounterBloc()
+    ..add(CounterEvent.increment)
+    ..add(CounterEvent.decrement)
+    ..close();
+}
+```
+
+すると、以下が表示されます。  
+
+```
+CouterBloc.onChange(): Change { currentState: 0, nextState: 1 }
+CouterBloc.onChange(): Change { currentState: 1, nextState: 0 }
+```

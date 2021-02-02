@@ -16,4 +16,10 @@ class CounterBloc extends Bloc<CounterEvent, int> {
         break;
     }
   }
+
+  @override
+  void onChange(Change<int> change) {
+    print('CouterBloc.onChange(): $change');
+    super.onChange(change);
+  }
 }

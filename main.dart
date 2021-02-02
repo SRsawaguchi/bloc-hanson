@@ -23,7 +23,15 @@ void exampleOfStreamUsage() async {
   await bloc.close();
 }
 
+void exampleOfStateChange() {
+  CounterBloc()
+    ..add(CounterEvent.increment)
+    ..add(CounterEvent.decrement)
+    ..close();
+}
+
 void main() {
   // exampleOfBasicUsage();
-  exampleOfStreamUsage();
+  // exampleOfStreamUsage();
+  exampleOfStateChange();
 }
