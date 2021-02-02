@@ -22,4 +22,10 @@ class CounterBloc extends Bloc<CounterEvent, int> {
     print('CouterBloc.onChange(): $change');
     super.onChange(change);
   }
+
+  @override
+  void onTransition(Transition<CounterEvent, int> transition) {
+    print('CouterBloc.onTransition(): $transition');
+    super.onTransition(transition);
+  }
 }

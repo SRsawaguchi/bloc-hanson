@@ -150,3 +150,32 @@ void main() {
 CouterBloc.onChange(): Change { currentState: 0, nextState: 1 }
 CouterBloc.onChange(): Change { currentState: 1, nextState: 0 }
 ```
+
+### onTransition
+Cubitとちがい、BlocはEventドリブン。  
+そのため、「どんなイベントを受け取って、どんな状態に遷移するのか」を把握したい場合がある。  
+その場合は、`onTransition`をオーバーライドすればよい。  
+
+```dart
+class CounterBloc extends Bloc<CounterEvent, int> {
+   // 省略
+
+  @override
+  void onTransition(Transition<CounterEvent, int> transition) {
+    print('CouterBloc.onTransition(): $transition');
+    super.onTransition(transition);
+  }
+}
+```
+
+この状態で先ほどの`onChange`と同様の`main()`を実行すると、以下が出力される。  
+
+```
+CouterBloc.onTransition(): Transition { currentState: 0, event: CounterEvent.increment, nextState: 1 }
+CouterBloc.onChange(): Change { currentState: 0, nextState: 1 }
+CouterBloc.onTransition(): Transition { currentState: 1, event: CounterEvent.decrement, nextState: 0 }
+CouterBloc.onChange(): Change { currentState: 1, nextState: 0 }
+```
+
+このように、発生したイベントの種類が取得できる。  
+なお、`onTransition`は`onChange`よりも前に呼ばれる。  
