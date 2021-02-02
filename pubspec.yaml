@@ -1,0 +1,12 @@
+name: bloc_hanson
+description: A hanson of Bloc
+
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dev_dependencies:
+  bloc: ^6.0.0

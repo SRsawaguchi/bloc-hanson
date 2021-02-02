@@ -1,2 +1,2 @@
 # bloc-hanson
-DartのライブラリBlocを学習。
+DartのライブラリBlocを学習。  
