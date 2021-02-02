@@ -1,6 +1,7 @@
-import 'dart:developer';
+import 'package:bloc/bloc.dart';
 
 import './counter_bloc.dart';
+import './simple_bloc_observer.dart';
 
 void exampleOfBasicUsage() async {
   final bloc = CounterBloc();
@@ -24,6 +25,7 @@ void exampleOfStreamUsage() async {
 }
 
 void exampleOfStateChange() {
+  Bloc.observer = SimpleBlocObserver();
   CounterBloc()
     ..add(CounterEvent.increment)
     ..add(CounterEvent.decrement)

@@ -179,3 +179,60 @@ CouterBloc.onChange(): Change { currentState: 1, nextState: 0 }
 
 このように、発生したイベントの種類が取得できる。  
 なお、`onTransition`は`onChange`よりも前に呼ばれる。  
+
+### 全てのBlocのObserve
+Cubitと同様に、大きいアプリでは複数のBlocが存在することが普通。  
+全てのBlocの`onChange`や`onTransition`をobserveするには、Cubitと同じように`BlocObserver`を継承したクラスを作成する。  
+
+
+```dart
+import 'package:bloc/bloc.dart';
+
+class SimpleBlocObserver extends BlocObserver {
+  @override
+  void onChange(Cubit cubit, Change change) {
+    print('Bloc.onChange(): $change');
+    super.onChange(cubit, change);
+  }
+
+  @override
+  void onTransition(Bloc bloc, Transition transition) {
+    print('Bloc.onTransition(): $transition');
+    super.onTransition(bloc, transition);
+  }
+}
+```
+
+そして、`main()`では以下のように利用する。  
+
+```dart
+void main() {
+  Bloc.observer = SimpleBlocObserver();
+  CounterBloc()
+    ..add(CounterEvent.increment)
+    ..add(CounterEvent.decrement)
+    ..close();
+}
+```
+
+すると以下のように表示される。  
+
+```
+CouterBloc.onTransition(): Transition { currentState: 0, event: CounterEvent.increment, nextState: 1 }
+Bloc.onTransition(): Transition { currentState: 0, event: CounterEvent.increment, nextState: 1 }
+CouterBloc.onChange(): Change { currentState: 0, nextState: 1 }
+Bloc.onChange(): Change { currentState: 0, nextState: 1 }
+CouterBloc.onTransition(): Transition { currentState: 1, event: CounterEvent.decrement, nextState: 0 }
+Bloc.onTransition(): Transition { currentState: 1, event: CounterEvent.decrement, nextState: 0 }
+CouterBloc.onChange(): Change { currentState: 1, nextState: 0 }
+Bloc.onChange(): Change { currentState: 1, nextState: 0 }
+```
+
+呼び出される順番に注意する。  
+
+1. CounterBloc.onTransition
+1. Bloc.onTransition
+1. CounterBloc.onChange
+1. Bloc.onChange
+
+まずはBlocクラスに定義した同種のメソッドから実行されていく。  
