@@ -12,6 +12,10 @@ class CounterBloc extends Bloc<CounterEvent, int> {
         yield state + 1;
         break;
       case CounterEvent.decrement:
+        if (state <= 0) {
+          addError(Exception('cannot decrement!'), StackTrace.current);
+          break;
+        }
         yield state - 1;
         break;
     }
@@ -27,5 +31,11 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   void onTransition(Transition<CounterEvent, int> transition) {
     print('CouterBloc.onTransition(): $transition');
     super.onTransition(transition);
+  }
+
+  @override
+  void onError(Object error, StackTrace stackTrace) {
+    print('CounterBloc.onError(): $error');
+    super.onError(error, stackTrace);
   }
 }

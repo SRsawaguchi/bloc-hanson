@@ -238,3 +238,70 @@ Bloc.onChange(): Change { currentState: 1, nextState: 0 }
 1. Bloc.onChange
 
 まずはBlocクラスに定義した同種のメソッドから実行されていく。  
+
+### エラーハンドリング
+
+Cubitと同じように、`addError()`でエラーを追加できる。  
+そして、それを`onError()`でobserveできる。  
+
+```dart
+// 省略
+class CounterBloc extends Bloc<CounterEvent, int> {
+  CounterBloc() : super(0);
+
+  @override
+  Stream<int> mapEventToState(CounterEvent event) async* {
+    switch (event) {
+    // 省略
+      case CounterEvent.decrement:
+        if (state <= 0) {
+          addError(Exception('cannot decrement!'), StackTrace.current);
+          break;
+        }
+        yield state - 1;
+        break;
+    }
+  }
+
+  @override
+  void onError(Object error, StackTrace stackTrace) {
+    print('CounterBloc.onError(): $error');
+    super.onError(error, stackTrace);
+  }
+}
+```
+
+なお、Cubitと同様に、以下のようにBlocObserverでもobserveできる。  
+
+```dart
+class SimpleBlocObserver extends BlocObserver {
+    // 省略
+
+  @override
+  void onError(Cubit cubit, Object error, StackTrace stackTrace) {
+    print('Bloc.onError(): ($cubit) $error');
+    super.onError(cubit, error, stackTrace);
+  }
+}
+```
+
+`main()`を以下のようにする。  
+
+
+```dart
+void main() {
+  Bloc.observer = SimpleBlocObserver();
+  CounterBloc()
+    ..add(CounterEvent.decrement)
+    ..close();
+}
+```
+
+実行すると、以下が得られる。  
+
+```
+CounterBloc.onError(): Exception: cannot decrement!
+Bloc.onError(): (Instance of 'CounterBloc') Exception: cannot decrement!
+```
+
+こちらも、これまでの`onChange`などと同様、Blocクラスの`onError`が先に呼ばれるので注意。  

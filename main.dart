@@ -32,8 +32,16 @@ void exampleOfStateChange() {
     ..close();
 }
 
+void exampleOfHandleError() {
+  Bloc.observer = SimpleBlocObserver();
+  CounterBloc()
+    ..add(CounterEvent.decrement)
+    ..close();
+}
+
 void main() {
   // exampleOfBasicUsage();
   // exampleOfStreamUsage();
-  exampleOfStateChange();
+  // exampleOfStateChange();
+  exampleOfHandleError();
 }
