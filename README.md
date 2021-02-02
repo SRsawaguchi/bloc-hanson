@@ -180,6 +180,8 @@ CouterBloc.onChange(): Change { currentState: 1, nextState: 0 }
 このように、発生したイベントの種類が取得できる。  
 なお、`onTransition`は`onChange`よりも前に呼ばれる。  
 
+※なお、`onEvent`という、イベントが`add()`された直後に呼び出されるメソッドもオーバーライドできる。  
+
 ### 全てのBlocのObserve
 Cubitと同様に、大きいアプリでは複数のBlocが存在することが普通。  
 全てのBlocの`onChange`や`onTransition`をobserveするには、Cubitと同じように`BlocObserver`を継承したクラスを作成する。  
