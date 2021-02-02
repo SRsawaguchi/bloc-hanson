@@ -75,3 +75,29 @@ void main() {
 Cubitの時と違い、関数を呼び出すのでは無く、`bloc.add()`メソッドを通じてイベントを発生させている。  
 
 
+また、Cubitと同様に、以下のようにStreamとしても利用できる。  
+
+```dart
+void exampleOfStreamUsage() async {
+  final bloc = CounterBloc();
+  final subscription = bloc.listen((state) {
+    print('state changed: $state');
+  });
+  bloc.add(CounterEvent.increment);
+  bloc.add(CounterEvent.increment);
+  await Future.delayed(Duration.zero);
+  await subscription.cancel();
+  await bloc.close();
+}
+
+void main() {
+  exampleOfStreamUsage();
+}
+```
+
+このプログラムを実行すると、以下が表示される。  
+
+```
+state changed: 1
+state changed: 2
+```

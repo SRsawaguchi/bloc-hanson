@@ -11,6 +11,19 @@ void exampleOfBasicUsage() async {
   await bloc.close();
 }
 
+void exampleOfStreamUsage() async {
+  final bloc = CounterBloc();
+  final subscription = bloc.listen((state) {
+    print('state changed: $state');
+  });
+  bloc.add(CounterEvent.increment);
+  bloc.add(CounterEvent.increment);
+  await Future.delayed(Duration.zero);
+  await subscription.cancel();
+  await bloc.close();
+}
+
 void main() {
-  exampleOfBasicUsage();
+  // exampleOfBasicUsage();
+  exampleOfStreamUsage();
 }
